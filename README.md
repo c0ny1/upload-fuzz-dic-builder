@@ -43,7 +43,7 @@ python upload-fuzz-dic-builder.py -n test -a jpg -l php -m apache --os win -o up
 ### 1.4 注意：
 
 1. 生成时给的上传点相关信息越详细，生成的字典越精确！
-2. 在使用burp的Intr模块进行fuzz时将Payload面板中Payload Encoding一栏的URL-encode these characters选项设置未未选中状态。
+2. 在使用burp的Intr模块进行fuzz时将Payload面板中`Payload Encoding`一栏的`URL-encode these characters`选项设置为未选中状态。
 
 ![burp intruder模块设置](doc/burp_intruder_setting.png)
 
