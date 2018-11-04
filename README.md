@@ -49,4 +49,4 @@ python upload-fuzz-dic-builder.py -n test -a jpg -l php -m apache --os win -o up
 
 ## 二、more
 
-[构造优质上传漏洞fuzz字典](http://gv7.me/)
+[构造优质上传漏洞fuzz字典](http://gv7.me/articles/2018/make-upload-vul-fuzz-dic/)
