@@ -3,7 +3,7 @@
 author: c0ny1<root@gv7.me>
 github: https://github.com/c0ny1/upload-fuzz-dic-builder
 date: 2018-11-04 23:16
-description: 基于百度云观测接口获取子域名
+description: 生成符合漏洞实际场景fuzz字典的脚本
 '''
 
 import argparse
@@ -55,8 +55,7 @@ def str_81_to_ff():
 
 windows_os = [' ','.','/','::$DATA','<','>','>>>','%20','%00'] + str_81_to_ff()
 
-
-def windows_os_build(suffix):
+def windows_suffix_creater(suffix):
 	res = []
 	for s in suffix:
 		for w in windows_os:
@@ -237,9 +236,9 @@ if __name__ == '__main__':
 		case_asp_php_parse_suffix = case_asp_parse_suffix + case_php_parse_suffix
 		iis_parse_suffix = iis_suffix_creater(case_asp_php_parse_suffix)
 		case_asp_php_html_parse_suffix = case_asp_parse_suffix + case_php_parse_suffix + case_html_parse_suffix
-		apache_parse_suffix = apache_build(case_asp_php_html_parse_suffix)
+		apache_parse_suffix = apache_suffix_creater(case_asp_php_html_parse_suffix)
 		case_php_jsp_parse_suffix = case_php_parse_suffix + case_jsp_parse_suffix
-		tomcat_parse_suffix = tomcat_build(case_php_jsp_parse_suffix)		
+		tomcat_parse_suffix = tomcat_suffix_creater(case_php_jsp_parse_suffix)		
 		middleware_parse_suffix = iis_parse_suffix + apache_parse_suffix + tomcat_parse_suffix
 	
 	middleware_parse_suffix = duplicate_removal(middleware_parse_suffix)
@@ -257,11 +256,11 @@ if __name__ == '__main__':
 	
 	# 系统特性
 	if os == 'win':
-		os_parse_suffix = windows_os_build(case_parse_suffix)
+		os_parse_suffix = windows_suffix_creater(case_parse_suffix)
 	elif os == 'linux':
 		os_parse_suffix = parse_suffix
 	else:
-		win_suffix = windows_os_build(case_parse_suffix)
+		win_suffix = windows_suffix_creater(case_parse_suffix)
 		linux_suffix = parse_suffix
 		os_parse_suffix = win_suffix + linux_suffix
 	
