@@ -1,5 +1,7 @@
 # upload-fuzz-dic-builder 上传漏洞fuzz字典生成脚本
 
+<center>![生成的字典](doc/upload_fuzz_dic.png)</center>
+
 ## 一、uasg
 
 ```
