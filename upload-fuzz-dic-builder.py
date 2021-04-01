@@ -9,6 +9,7 @@ description: 生成符合漏洞实际场景fuzz字典的脚本
 import argparse
 import copy
 import urllib
+import urllib.parse
 
 ## 各类语言可解析的后缀
 html_parse_suffix = ['html','htm','phtml','pht','Html','Htm','pHtml']
@@ -30,7 +31,7 @@ def apache_suffix_creater(suffix):
 	for l in suffix:
 		str = '%s.xxx' % l
 		res.append(str)
-		str = '%s%s' % (l,urllib.unquote('%0a')) #CVE-2017-15715
+		str = '%s%s' % (l,urllib.parse.unquote('%0a')) #CVE-2017-15715
 		res.append(str)
 	return res
 
@@ -49,7 +50,7 @@ def str_81_to_ff():
 	for i in range(129,256):
 		str = '%x' % i
 		str = '%' + str
-		str = urllib.unquote(str)
+		str = urllib.parse.unquote(str)
 		res.append(str)
 	return res
 
@@ -69,7 +70,7 @@ def str_00_truncation(suffix,allow_suffix):
 	for i in suffix:
 		str = '%s%s.%s' % (i,'%00',allow_suffix)
 		res.append(str)
-		str = '%s%s.%s' % (i,urllib.unquote('%00'),allow_suffix)
+		str = '%s%s.%s' % (i,urllib.parse.unquote('%00'),allow_suffix)
 		res.append(str)
 	return res
 	
@@ -203,7 +204,7 @@ if __name__ == '__main__':
 		parse_suffix = jsp_parse_suffix
 	else: # language == 'all'
 		parse_suffix = html_parse_suffix + asp_parse_suffix + php_parse_suffix + jsp_parse_suffix
-	print u'[+] 收集%d条可解析后缀完毕！' % len(parse_suffix)
+	print('[+] 收集%d条可解析后缀完毕！' % len(parse_suffix))
 	
 	# 可解析后缀 + 大小写混合
 	if os == 'win' or os == 'all':
@@ -212,7 +213,7 @@ if __name__ == '__main__':
 		case_php_parse_suffix = list_case_mixing(php_parse_suffix)
 		case_jsp_parse_suffix = list_case_mixing(jsp_parse_suffix)
 		case_parse_suffix = list_case_mixing(parse_suffix)
-		print u'[+] 加入%d条可解析后缀大小写混合完毕！' % len(case_parse_suffix)
+		print('[+] 加入%d条可解析后缀大小写混合完毕！' % len(case_parse_suffix))
 	else: # os == 'linux'
 		case_html_parse_suffix = html_parse_suffix
 		case_asp_parse_suffix = asp_parse_suffix
@@ -242,15 +243,15 @@ if __name__ == '__main__':
 		middleware_parse_suffix = iis_parse_suffix + apache_parse_suffix + tomcat_parse_suffix
 	
 	middleware_parse_suffix = duplicate_removal(middleware_parse_suffix)
-	print u'[+] 加入%d条中间件漏洞完毕！' % len(middleware_parse_suffix)
+	print('[+] 加入%d条中间件漏洞完毕！' % len(middleware_parse_suffix))
 	
 	# .htaccess
 	if (middleware == 'apache' or middleware == 'all') and (os == 'win' or os == 'all'):
 		htaccess_suffix = str_case_mixing(".htaccess")
-		print u'[+] 加入%d条.htaccess完毕！' % len(htaccess_suffix)
+		print('[+] 加入%d条.htaccess完毕！' % len(htaccess_suffix))
 	elif (middleware == 'apache' or middleware == 'all') and os == 'linux':
 		htaccess_suffix = ['.htaccess']
-		print u'[+] 加入1条.htaccess'
+		print('[+] 加入1条.htaccess')
 	else:
 		htaccess_suffix = []
 	
@@ -265,7 +266,7 @@ if __name__ == '__main__':
 		os_parse_suffix = win_suffix + linux_suffix
 	
 	os_parse_suffix = duplicate_removal(os_parse_suffix)
-	print u'[+] 加入%d条系统特性完毕！' % len(os_parse_suffix)
+	print('[+] 加入%d条系统特性完毕！' % len(os_parse_suffix))
 	
 	# 语言漏洞
 	
@@ -274,7 +275,7 @@ if __name__ == '__main__':
 	# 双后缀 + 大小写混合
 	if double_suffix:
 		double_parse_suffix = list_double_suffix_creater(case_parse_suffix)
-		print u'[+] 加入%d条双后缀完毕！' % len(double_parse_suffix)
+		print('[+] 加入%d条双后缀完毕！' % len(double_parse_suffix))
 	else:
 		double_parse_suffix = []
 		
@@ -293,4 +294,4 @@ if __name__ == '__main__':
 		f.write(i)
 		f.write('\n')
 	f.close()
-	print u'[+] 去重后共%s条数据写入%s文件' % (num,output_filename)
+	print('[+] 去重后共%s条数据写入%s文件' % (num,output_filename))
